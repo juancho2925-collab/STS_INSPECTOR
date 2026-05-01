@@ -4,144 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>STS45 INSPECTOR - PUERTO ANTIOQUIA</title>
+    <title>INSPECCIÓN SPREADERS STS45</title>
     <style>
-        :root { --dark-bg: #0a0e14; --card-bg: #161b22; --blue: #0088ff; --green: #238636; --red: #da3633; --text: #e6edf3; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding-bottom: 80px; }
+        :root { --bg: #050a0f; --card: #0d141d; --blue: #00d2ff; --green: #238636; --red: #f85149; --text: #ffffff; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 90px; }
         
-        /* Pantallas */
-        .page { display: none; padding: 20px; }
-        .page.active { display: block; }
+        /* HEADER IGUAL AL MANUAL */
+        .app-header { background: var(--card); padding: 40px 20px; text-align: center; border-bottom: 2px solid var(--blue); }
+        .logo-box { border: 2px solid var(--blue); width: 60px; height: 60px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .logo-inner { width: 20px; height: 20px; background: var(--blue); }
+        .title { font-size: 28px; font-weight: 900; letter-spacing: 2px; line-height: 1; }
+        .subtitle { color: var(--blue); font-size: 14px; margin-top: 5px; font-weight: bold; }
 
-        /* Header Estilo App */
-        .app-header { text-align: center; padding: 30px 10px; background: linear-gradient(180deg, #161b22 0%, #0a0e14 100%); }
-        .logo-circle { width: 80px; height: 80px; border: 2px solid var(--blue); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; }
-        .logo-square { width: 25px; height: 25px; background: var(--blue); }
+        /* PANELES DE CONTROL */
+        .status-bar { display: flex; gap: 10px; padding: 15px; }
+        .stat-card { flex: 1; background: var(--card); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #30363d; }
+        .stat-label { font-size: 10px; color: #8b949e; text-transform: uppercase; }
+        .stat-value { font-size: 16px; font-weight: bold; margin-top: 5px; }
 
-        /* Tarjetas de Datos */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .info-box { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #30363d; }
-        .info-label { font-size: 10px; color: #8b949e; text-transform: uppercase; }
-        .info-val { font-size: 18px; font-weight: bold; color: var(--blue); }
+        /* SECCIONES DEL MANUAL */
+        .section-title { padding: 15px; background: #161b22; color: var(--blue); font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .item-card { background: var(--card); padding: 15px; border-bottom: 1px solid #30363d; display: flex; flex-direction: column; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; }
+        .item-text { font-size: 15px; font-weight: 500; }
+        
+        .btn-group { display: flex; gap: 8px; }
+        .btn-check { padding: 10px 15px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: white; font-weight: bold; }
+        .btn-check.ok-active { background: var(--green); border-color: var(--green); }
+        .btn-check.no-active { background: var(--red); border-color: var(--red); }
 
-        /* Botones Principales */
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: bold; font-size: 16px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-blue { background: var(--blue); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+        textarea { width: 100%; margin-top: 10px; background: #0d1117; border: 1px solid var(--red); color: white; padding: 10px; border-radius: 6px; display: none; }
 
-        /* Checklist */
-        .item-card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #30363d; }
-        .item-card.ok { border-left-color: var(--green); }
-        .item-card.nook { border-left-color: var(--red); }
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-choice { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: white; }
-        .btn-choice.active-ok { background: var(--green); border-color: var(--green); }
-        .btn-choice.active-nook { background: var(--red); border-color: var(--red); }
-        textarea { width: 100%; margin-top: 10px; background: #0d1117; border: 1px solid var(--red); color: white; padding: 10px; border-radius: 6px; display: none; box-sizing: border-box; }
-
-        /* Navegación Inferior */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #161b22; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #30363d; z-index: 100; }
-        .nav-item { color: #8b949e; font-size: 10px; text-decoration: none; text-align: center; }
-        .nav-item.active { color: var(--blue); }
+        /* FOOTER NAVEGACIÓN */
+        .nav { position: fixed; bottom: 0; width: 100%; background: #161b22; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #30363d; }
+        .nav-btn { color: #8b949e; font-size: 10px; text-align: center; text-decoration: none; }
+        .nav-btn.active { color: var(--blue); }
+        
+        .btn-save { display: block; width: 90%; margin: 20px auto; background: var(--blue); color: black; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; border: none; }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA 1: INICIO -->
-    <div id="p-inicio" class="page active">
-        <div class="app-header">
-            <div class="logo-circle"><div class="logo-square"></div></div>
-            <h1 style="margin:0; font-size: 24px; letter-spacing: 1px;">INSPECCIÓN<br><span style="color:var(--blue)">SPREADERS</span></h1>
-            <p style="font-size: 12px; color: #8b949e; margin-top: 5px;">PUERTO ANTIOQUIA - SPQC</p>
-        </div>
-
-        <div class="info-grid">
-            <div class="info-box"><div class="info-label">Estado</div><div class="info-val" style="color:var(--green)">ONLINE</div></div>
-            <div id="turno-box" class="info-box"><div class="info-label">Turno Activo</div><div class="info-val">--</div></div>
-        </div>
-
-        <button class="btn btn-blue" onclick="showPage('p-checklist')">INICIAR INSPECCIÓN</button>
-        <button class="btn btn-outline">VER HISTORIAL</button>
+    <div class="app-header">
+        <div class="logo-box"><div class="logo-inner"></div></div>
+        <div class="title">INSPECCIÓN<br>SPREADERS</div>
+        <div class="subtitle">SISTEMA TÉCNICO DE VERIFICACIÓN STS45</div>
     </div>
 
-    <!-- PANTALLA 2: CHECKLIST -->
-    <div id="p-checklist" class="page">
-        <h2 style="color:var(--blue)">03-CHECKLIST</h2>
-        <div id="items-container"></div>
-        <button class="btn btn-blue" style="margin-top:20px" onclick="finalizar()">GENERAR PDF REPORTE</button>
+    <div class="status-bar">
+        <div class="stat-card"><div class="stat-label">Estado</div><div class="stat-value" style="color:#2ecc71">ONLINE</div></div>
+        <div class="stat-card"><div class="stat-label">Turno</div><div id="txt-turno" class="stat-value">T-</div></div>
     </div>
 
-    <!-- NAVEGACIÓN -->
-    <div class="nav-bar">
-        <a href="#" class="nav-item active" onclick="showPage('p-inicio')"><div>🏠</div>INICIO</a>
-        <a href="#" class="nav-item" onclick="showPage('p-checklist')"><div>📋</div>CHECKLIST</a>
-        <a href="#" class="nav-item"><div>📊</div>REPORTES</a>
+    <div id="checklist-form">
+        <!-- SECCIÓN: SISTEMA ELÉCTRICO -->
+        <div class="section-title">03 - CHECKLIST: SISTEMA ELÉCTRICO</div>
+        <div id="sec-electrica"></div>
+
+        <!-- SECCIÓN: ESTRUCTURA -->
+        <div class="section-title">03 - CHECKLIST: ESTRUCTURA Y MECÁNICA</div>
+        <div id="sec-mecanica"></div>
+    </div>
+
+    <button class="btn-save" onclick="guardar()">GUARDAR INSPECCIÓN (PDF)</button>
+
+    <div class="nav">
+        <a href="#" class="nav-btn active"><div>🏠</div>INICIO</a>
+        <a href="#" class="nav-btn"><div>📋</div>CHECKLIST</a>
+        <a href="#" class="nav-btn"><div>📷</div>FOTOS</a>
+        <a href="#" class="nav-btn"><div>📂</div>HISTORIAL</a>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        // LÓGICA DE TURNOS AUTOMÁTICOS (Manual Paso 1)
-        function actualizarTurno() {
-            const hora = new Date().getHours();
-            let turno = "T3";
-            if(hora >= 7 && hora < 15) turno = "T1";
-            else if(hora >= 15 && hora < 23) turno = "T2";
-            document.querySelector('#turno-box .info-val').innerText = turno;
+        // DATOS EXACTOS DEL MANUAL V3.0
+        const itemsElectricos = ["Conector HARTING", "Cableado principal", "Terminales de tierra", "Fusibles"];
+        const itemsMecanicos = ["Estructura y Soldaduras", "Pines Twistlock", "Cilindros Extensión", "Motores Flippers", "Mangueras Hidráulicas"];
+
+        function renderItems(lista, containerId) {
+            const container = document.getElementById(containerId);
+            lista.forEach((text, i) => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `
+                    <div class="item-row">
+                        <span class="item-text">${text}</span>
+                        <div class="btn-group">
+                            <button class="btn-check" onclick="marcar(this, '${containerId}-${i}', 'OK')">OK</button>
+                            <button class="btn-check" onclick="marcar(this, '${containerId}-${i}', 'NO OK')">NO OK</button>
+                        </div>
+                    </div>
+                    <textarea id="obs-${containerId}-${i}" placeholder="OBSERVACIÓN OBLIGATORIA (NO OK)"></textarea>
+                `;
+                container.appendChild(div);
+            });
         }
 
-        // ÍTEMS DEL MANUAL (Paso 3)
-        const items = [
-            "Conector HARTING", "Cableado Principal", "Terminales de Tierra", 
-            "Fusibles", "Estructura y Soldaduras", "Twistlocks", "Flippers"
-        ];
-
-        const container = document.getElementById('items-container');
-        items.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'item-card';
-            div.innerHTML = `
-                <div style="font-weight:bold">${item}</div>
-                <div class="btn-group">
-                    <button class="btn-choice" onclick="select(this, ${index}, 'OK')">OK</button>
-                    <button class="btn-choice" onclick="select(this, ${index}, 'NO OK')">NO OK</button>
-                </div>
-                <textarea id="obs-${index}" placeholder="Escriba la falla detectada..."></textarea>
-            `;
-            container.appendChild(div);
-        });
-
-        function select(btn, idx, status) {
+        function marcar(btn, id, status) {
+            const parent = btn.parentElement;
             const card = btn.closest('.item-card');
-            const area = document.getElementById(`obs-${idx}`);
-            const btns = btn.parentElement.querySelectorAll('button');
-            btns.forEach(b => b.className = 'btn-choice');
+            const obs = document.getElementById(`obs-${id}`);
+            parent.querySelectorAll('button').forEach(b => b.className = 'btn-check');
             
             if(status === 'OK') {
-                btn.classList.add('active-ok');
-                card.className = 'item-card ok';
-                area.style.display = 'none';
+                btn.classList.add('ok-active');
+                obs.style.display = 'none';
             } else {
-                btn.classList.add('active-nook');
-                card.className = 'item-card nook';
-                area.style.display = 'block';
+                btn.classList.add('no-active');
+                obs.style.display = 'block';
             }
         }
 
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        // LÓGICA DE TURNO SEGÚN MANUAL (Paso 1)
+        function setTurno() {
+            const h = new Date().getHours();
+            let t = "T3 (23-07h)";
+            if(h >= 7 && h < 15) t = "T1 (07-15h)";
+            else if(h >= 15 && h < 23) t = "T2 (15-23h)";
+            document.getElementById('txt-turno').innerText = t;
         }
 
-        function finalizar() {
-            alert("Generando PDF basado en Manual V3.0...");
+        function guardar() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text("REPORTE STS45 - PUERTO ANTIOQUIA", 10, 10);
-            doc.save("Inspeccion_STS45.pdf");
+            doc.setFontSize(18);
+            doc.text("MANUAL DE INSPECCIÓN SPREADERS V3.0", 10, 20);
+            doc.setFontSize(12);
+            doc.text("Puerto Antioquia - SPQC", 10, 30);
+            doc.text("Resultado: Inspección Guardada Localmente", 10, 45);
+            doc.save("Reporte_STS45_V3.pdf");
+            alert("PDF Generado: Reporte_STS45_V3.pdf");
         }
 
-        actualizarTurno();
+        renderItems(itemsElectricos, 'sec-electrica');
+        renderItems(itemsMecanicos, 'sec-mecanica');
+        setTurno();
     </script>
 </body>
 </html>
