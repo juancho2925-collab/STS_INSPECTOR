@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="manifest.json">
+    <title>STS45 Spreader Inspector</title>
+    <style>
+        :root { --blue: #004a99; --red: #d9534f; --green: #5cb85c; --bg: #efeff4; }
+        body { font-family: -apple-system, Helvetica, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .row { display: flex; justify-content: space-between; align-items: center; }
+        .btn-group { display: flex; gap: 8px; }
+        button { border: 1px solid #ccc; padding: 10px 15px; border-radius: 8px; background: white; font-weight: 600; transition: 0.2s; }
+        .active-ok { background: var(--green) !important; color: white; border-color: var(--green); }
+        .active-nook { background: var(--red) !important; color: white; border-color: var(--red); }
+        textarea { width: 100%; margin-top: 10px; border: 1px solid #ddd; border-radius: 8px; padding: 8px; display: none; box-sizing: border-box; }
+        .show { display: block; }
+        .footer { position: sticky; bottom: 20px; display: flex; gap: 10px; }
+        .btn-main { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 16px; background: var(--blue); color: white; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Inspección STS45</h2>
+    <div id="form">
+        <!-- Ejemplo Ítem -->
+        <div class="card" data-name="Estructura y Soldaduras">
+            <div class="row">
+                <span>Estructura y Soldaduras</span>
+                <div class="btn-group">
+                    <button onclick="check(this, 'OK')">OK</button>
+                    <button onclick="check(this, 'NO OK')">NO OK</button>
+                </div>
+            </div>
+            <textarea placeholder="Describa el hallazgo..."></textarea>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn-main" onclick="savePDF()">GENERAR REPORTE PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function check(btn, status) {
+            const card = btn.closest('.card');
+            const area = card.querySelector('textarea');
+            card.querySelectorAll('button').forEach(b => b.classList.remove('active-ok', 'active-nook'));
+            if(status === 'OK') { btn.classList.add('active-ok'); area.classList.remove('show'); }
+            else { btn.classList.add('active-nook'); area.classList.add('show'); }
+        }
+
+        async function savePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 20;
+            doc.text("REPORTE DE INSPECCIÓN SPREADER STS45", 10, y);
+            y += 10;
+
+            const items = document.querySelectorAll('.card');
+            items.forEach(item => {
+                const title = item.getAttribute('data-name');
+                const status = item.querySelector('.active-ok') ? 'OK' : (item.querySelector('.active-nook') ? 'NO OK' : 'N/A');
+                const obs = item.querySelector('textarea').value;
+                
+                doc.text(`${title}: ${status}`, 10, y);
+                y += 10;
+                if(status === 'NO OK') {
+                    doc.setFontSize(10);
+                    doc.text(`Obs: ${obs}`, 15, y);
+                    y += 10;
+                    doc.setFontSize(12);
+                }
+            });
+            doc.save("inspeccion_sts45.pdf");
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
