@@ -3,131 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STS45 INSPECTOR PRO</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>STS45 INSPECTOR - PUERTO ANTIOQUIA</title>
     <style>
-        :root { --blue: #003366; --red: #cc0000; --green: #28a745; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .header { background: var(--blue); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 8px solid #ddd; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .item-name { font-size: 18px; font-weight: bold; color: #333; flex: 1; }
-        .btn-group { display: flex; gap: 12px; }
-        button.action { padding: 12px 20px; border-radius: 8px; border: 2px solid #ddd; background: white; font-weight: bold; cursor: pointer; font-size: 14px; min-width: 80px; transition: 0.3s; }
-        button.active-ok { background: var(--green) !important; color: white; border-color: var(--green); }
-        button.active-nook { background: var(--red) !important; color: white; border-color: var(--red); }
-        textarea { width: 100%; margin-top: 15px; padding: 12px; border: 2px solid var(--red); border-radius: 8px; display: none; box-sizing: border-box; font-size: 16px; background: #fff8f8; }
-        .show { display: block !important; }
-        .footer { position: sticky; bottom: 20px; margin-top: 30px; }
-        .btn-main { width: 100%; background: var(--blue); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,51,102,0.4); cursor: pointer; }
+        :root { --dark-bg: #0a0e14; --card-bg: #161b22; --blue: #0088ff; --green: #238636; --red: #da3633; --text: #e6edf3; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding-bottom: 80px; }
+        
+        /* Pantallas */
+        .page { display: none; padding: 20px; }
+        .page.active { display: block; }
+
+        /* Header Estilo App */
+        .app-header { text-align: center; padding: 30px 10px; background: linear-gradient(180deg, #161b22 0%, #0a0e14 100%); }
+        .logo-circle { width: 80px; height: 80px; border: 2px solid var(--blue); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; }
+        .logo-square { width: 25px; height: 25px; background: var(--blue); }
+
+        /* Tarjetas de Datos */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .info-box { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #30363d; }
+        .info-label { font-size: 10px; color: #8b949e; text-transform: uppercase; }
+        .info-val { font-size: 18px; font-weight: bold; color: var(--blue); }
+
+        /* Botones Principales */
+        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: bold; font-size: 16px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .btn-blue { background: var(--blue); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--blue); color: var(--blue); }
+
+        /* Checklist */
+        .item-card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #30363d; }
+        .item-card.ok { border-left-color: var(--green); }
+        .item-card.nook { border-left-color: var(--red); }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-choice { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: white; }
+        .btn-choice.active-ok { background: var(--green); border-color: var(--green); }
+        .btn-choice.active-nook { background: var(--red); border-color: var(--red); }
+        textarea { width: 100%; margin-top: 10px; background: #0d1117; border: 1px solid var(--red); color: white; padding: 10px; border-radius: 6px; display: none; box-sizing: border-box; }
+
+        /* Navegación Inferior */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #161b22; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #30363d; z-index: 100; }
+        .nav-item { color: #8b949e; font-size: 10px; text-decoration: none; text-align: center; }
+        .nav-item.active { color: var(--blue); }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1 style="margin:0;">STS45 SPREADER</h1>
-    <p style="margin:5px 0 0; opacity: 0.9;">Inspección Técnica de Seguridad</p>
-</div>
+    <!-- PANTALLA 1: INICIO -->
+    <div id="p-inicio" class="page active">
+        <div class="app-header">
+            <div class="logo-circle"><div class="logo-square"></div></div>
+            <h1 style="margin:0; font-size: 24px; letter-spacing: 1px;">INSPECCIÓN<br><span style="color:var(--blue)">SPREADERS</span></h1>
+            <p style="font-size: 12px; color: #8b949e; margin-top: 5px;">PUERTO ANTIOQUIA - SPQC</p>
+        </div>
 
-<div id="inspector-list">
-    <!-- El script generará los ítems automáticamente -->
-</div>
+        <div class="info-grid">
+            <div class="info-box"><div class="info-label">Estado</div><div class="info-val" style="color:var(--green)">ONLINE</div></div>
+            <div id="turno-box" class="info-box"><div class="info-label">Turno Activo</div><div class="info-val">--</div></div>
+        </div>
 
-<div class="footer">
-    <button class="btn-main" onclick="exportarPDF()">GENERAR REPORTE FINAL PDF</button>
-</div>
+        <button class="btn btn-blue" onclick="showPage('p-checklist')">INICIAR INSPECCIÓN</button>
+        <button class="btn btn-outline">VER HISTORIAL</button>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-    // LISTA DE ÍTEMS IGUAL A TU APP ORIGINAL
-    const items = [
-        "Estructura Principal",
-        "Pines de Izaje (Twistlocks)",
-        "Sensores de Landing (Asiento)",
-        "Sistema Hidráulico y Fugas",
-        "Cilindros de Extensión",
-        "Motores de Flippers",
-        "Cables y Conexiones Eléctricas",
-        "Mangueras de Presión",
-        "Guías de Spreader",
-        "Luces e Indicadores"
-    ];
+    <!-- PANTALLA 2: CHECKLIST -->
+    <div id="p-checklist" class="page">
+        <h2 style="color:var(--blue)">03-CHECKLIST</h2>
+        <div id="items-container"></div>
+        <button class="btn btn-blue" style="margin-top:20px" onclick="finalizar()">GENERAR PDF REPORTE</button>
+    </div>
 
-    const container = document.getElementById('inspector-list');
+    <!-- NAVEGACIÓN -->
+    <div class="nav-bar">
+        <a href="#" class="nav-item active" onclick="showPage('p-inicio')"><div>🏠</div>INICIO</a>
+        <a href="#" class="nav-item" onclick="showPage('p-checklist')"><div>📋</div>CHECKLIST</a>
+        <a href="#" class="nav-item"><div>📊</div>REPORTES</a>
+    </div>
 
-    items.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-            <div class="item-row">
-                <div class="item-name">${index + 1}. ${item}</div>
-                <div class="btn-group">
-                    <button class="action" onclick="setStatus(${index}, 'OK', this)">OK</button>
-                    <button class="action" onclick="setStatus(${index}, 'NO OK', this)">NO OK</button>
-                </div>
-            </div>
-            <textarea id="obs-${index}" placeholder="DESCRIPCIÓN DEL FALLO (OBLIGATORIO)"></textarea>
-        `;
-        container.appendChild(div);
-    });
-
-    function setStatus(idx, status, btn) {
-        const card = btn.closest('.card');
-        const area = document.getElementById(`obs-${idx}`);
-        const btns = btn.parentElement.querySelectorAll('button');
-        
-        btns.forEach(b => b.classList.remove('active-ok', 'active-nook'));
-        
-        if(status === 'OK') {
-            btn.classList.add('active-ok');
-            card.style.borderLeftColor = "#28a745";
-            area.classList.remove('show');
-            area.value = "";
-        } else {
-            btn.classList.add('active-nook');
-            card.style.borderLeftColor = "#cc0000";
-            area.classList.add('show');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // LÓGICA DE TURNOS AUTOMÁTICOS (Manual Paso 1)
+        function actualizarTurno() {
+            const hora = new Date().getHours();
+            let turno = "T3";
+            if(hora >= 7 && hora < 15) turno = "T1";
+            else if(hora >= 15 && hora < 23) turno = "T2";
+            document.querySelector('#turno-box .info-val').innerText = turno;
         }
-    }
 
-    function exportarPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        let y = 20;
-        let valid = true;
+        // ÍTEMS DEL MANUAL (Paso 3)
+        const items = [
+            "Conector HARTING", "Cableado Principal", "Terminales de Tierra", 
+            "Fusibles", "Estructura y Soldaduras", "Twistlocks", "Flippers"
+        ];
 
-        doc.setFontSize(18);
-        doc.text("INSPECCIÓN TÉCNICA STS45", 10, y);
-        y += 15;
-        doc.setFontSize(12);
-
-        items.forEach((item, i) => {
-            const area = document.getElementById(`obs-${i}`);
-            const card = area.closest('.card');
-            const btnOk = card.querySelector('.active-ok');
-            const btnNo = card.querySelector('.active-nook');
-
-            if(!btnOk && !btnNo) { valid = false; return; }
-
-            const res = btnOk ? "OK" : "NO OK";
-            if(res === "NO OK" && !area.value.trim()) {
-                alert("Falta comentario en: " + item);
-                valid = false;
-                return;
-            }
-
-            doc.text(`${item}: ${res}`, 10, y);
-            y += 7;
-            if(area.value) {
-                doc.setFontSize(10);
-                doc.text("   Obs: " + area.value, 15, y);
-                y += 8;
-                doc.setFontSize(12);
-            }
+        const container = document.getElementById('items-container');
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerHTML = `
+                <div style="font-weight:bold">${item}</div>
+                <div class="btn-group">
+                    <button class="btn-choice" onclick="select(this, ${index}, 'OK')">OK</button>
+                    <button class="btn-choice" onclick="select(this, ${index}, 'NO OK')">NO OK</button>
+                </div>
+                <textarea id="obs-${index}" placeholder="Escriba la falla detectada..."></textarea>
+            `;
+            container.appendChild(div);
         });
 
-        if(!valid) { alert("Complete la inspección correctamente"); return; }
-        doc.save("Reporte_STS45.pdf");
-    }
-</script>
+        function select(btn, idx, status) {
+            const card = btn.closest('.item-card');
+            const area = document.getElementById(`obs-${idx}`);
+            const btns = btn.parentElement.querySelectorAll('button');
+            btns.forEach(b => b.className = 'btn-choice');
+            
+            if(status === 'OK') {
+                btn.classList.add('active-ok');
+                card.className = 'item-card ok';
+                area.style.display = 'none';
+            } else {
+                btn.classList.add('active-nook');
+                card.className = 'item-card nook';
+                area.style.display = 'block';
+            }
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        }
+
+        function finalizar() {
+            alert("Generando PDF basado en Manual V3.0...");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("REPORTE STS45 - PUERTO ANTIOQUIA", 10, 10);
+            doc.save("Inspeccion_STS45.pdf");
+        }
+
+        actualizarTurno();
+    </script>
 </body>
 </html>
