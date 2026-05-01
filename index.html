@@ -3,133 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Inspección STS45</title>
+    <title>STS45 INSPECTOR PRO</title>
     <style>
-        :root { --blue: #1a2a6c; --red: #b22222; --green: #2ecc71; --gray: #f4f4f9; }
-        body { font-family: -apple-system, sans-serif; background: var(--gray); margin: 0; padding: 15px; padding-bottom: 100px; }
-        .header { background: var(--blue); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 6px solid #ccc; }
-        .card.selected-ok { border-left-color: var(--green); }
-        .card.selected-nook { border-left-color: var(--red); }
-        .item-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .item-title { font-weight: bold; font-size: 1.1em; color: #333; }
-        .btn-group { display: flex; gap: 10px; }
-        button { padding: 10px 18px; border-radius: 8px; border: 1px solid #ddd; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-ok.active { background: var(--green); color: white; border-color: var(--green); }
-        .btn-nook.active { background: var(--red); color: white; border-color: var(--red); }
-        textarea { width: 100%; margin-top: 10px; border: 1px solid var(--red); border-radius: 8px; padding: 10px; display: none; box-sizing: border-box; background: #fff5f5; }
-        .visible { display: block; }
-        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; box-sizing: border-box; border-top: 1px solid #ddd; display: flex; gap: 10px; }
-        .btn-send { flex: 1; background: var(--blue); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 16px; }
+        :root { --blue: #003366; --red: #cc0000; --green: #28a745; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .header { background: var(--blue); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 8px solid #ddd; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .item-name { font-size: 18px; font-weight: bold; color: #333; flex: 1; }
+        .btn-group { display: flex; gap: 12px; }
+        button.action { padding: 12px 20px; border-radius: 8px; border: 2px solid #ddd; background: white; font-weight: bold; cursor: pointer; font-size: 14px; min-width: 80px; transition: 0.3s; }
+        button.active-ok { background: var(--green) !important; color: white; border-color: var(--green); }
+        button.active-nook { background: var(--red) !important; color: white; border-color: var(--red); }
+        textarea { width: 100%; margin-top: 15px; padding: 12px; border: 2px solid var(--red); border-radius: 8px; display: none; box-sizing: border-box; font-size: 16px; background: #fff8f8; }
+        .show { display: block !important; }
+        .footer { position: sticky; bottom: 20px; margin-top: 30px; }
+        .btn-main { width: 100%; background: var(--blue); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,51,102,0.4); cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1 style="margin:0; font-size: 1.5em;">STS45 SPREADER</h1>
-    <p style="margin:5px 0 0; opacity: 0.8;">Inspección de Seguridad</p>
+    <h1 style="margin:0;">STS45 SPREADER</h1>
+    <p style="margin:5px 0 0; opacity: 0.9;">Inspección Técnica de Seguridad</p>
 </div>
 
-<div id="form-container">
-    <!-- Lista de Ítems de Inspección -->
-    <script>
-        const items = [
-            "Estructura Principal y Soldaduras",
-            "Puntos de Izaje y Grilletes",
-            "Mecanismo Twistlock (Pines)",
-            "Cintas de Bloqueo / Desbloqueo",
-            "Sensores de Asiento (Landing)",
-            "Sistema Hidráulico (Fugas)",
-            "Cilindros de Extensión (20'-40'-45')",
-            "Guías (Flippers) y Motores",
-            "Caja Eléctrica y Cableado",
-            "Estado de Mangueras y Conexiones"
-        ];
-
-        document.write(items.map((item, index) => `
-            <div class="card" id="card-${index}">
-                <div class="item-info">
-                    <span class="item-title">${index + 1}. ${item}</span>
-                    <div class="btn-group">
-                        <button class="btn-ok" onclick="updateStatus(${index}, 'OK', this)">OK</button>
-                        <button class="btn-nook" onclick="updateStatus(${index}, 'NO OK', this)">NO OK</button>
-                    </div>
-                </div>
-                <textarea id="obs-${index}" placeholder="Detección de falla obligatoria..."></textarea>
-            </div>
-        `).join(''));
-    </script>
+<div id="inspector-list">
+    <!-- El script generará los ítems automáticamente -->
 </div>
 
 <div class="footer">
-    <button class="btn-send" onclick="generateReport()">GENERAR REPORTE PDF</button>
+    <button class="btn-main" onclick="exportarPDF()">GENERAR REPORTE FINAL PDF</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-    function updateStatus(id, status, btn) {
-        const card = document.getElementById(`card-${id}`);
-        const area = document.getElementById(`obs-${id}`);
-        const buttons = btn.parentElement.querySelectorAll('button');
-        
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // LISTA DE ÍTEMS IGUAL A TU APP ORIGINAL
+    const items = [
+        "Estructura Principal",
+        "Pines de Izaje (Twistlocks)",
+        "Sensores de Landing (Asiento)",
+        "Sistema Hidráulico y Fugas",
+        "Cilindros de Extensión",
+        "Motores de Flippers",
+        "Cables y Conexiones Eléctricas",
+        "Mangueras de Presión",
+        "Guías de Spreader",
+        "Luces e Indicadores"
+    ];
 
-        if (status === 'OK') {
-            card.className = 'card selected-ok';
-            area.classList.remove('visible');
-            area.value = '';
+    const container = document.getElementById('inspector-list');
+
+    items.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+            <div class="item-row">
+                <div class="item-name">${index + 1}. ${item}</div>
+                <div class="btn-group">
+                    <button class="action" onclick="setStatus(${index}, 'OK', this)">OK</button>
+                    <button class="action" onclick="setStatus(${index}, 'NO OK', this)">NO OK</button>
+                </div>
+            </div>
+            <textarea id="obs-${index}" placeholder="DESCRIPCIÓN DEL FALLO (OBLIGATORIO)"></textarea>
+        `;
+        container.appendChild(div);
+    });
+
+    function setStatus(idx, status, btn) {
+        const card = btn.closest('.card');
+        const area = document.getElementById(`obs-${idx}`);
+        const btns = btn.parentElement.querySelectorAll('button');
+        
+        btns.forEach(b => b.classList.remove('active-ok', 'active-nook'));
+        
+        if(status === 'OK') {
+            btn.classList.add('active-ok');
+            card.style.borderLeftColor = "#28a745";
+            area.classList.remove('show');
+            area.value = "";
         } else {
-            card.className = 'card selected-nook';
-            area.classList.add('visible');
+            btn.classList.add('active-nook');
+            card.style.borderLeftColor = "#cc0000";
+            area.classList.add('show');
         }
     }
 
-    function generateReport() {
+    function exportarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         let y = 20;
-        let complete = true;
+        let valid = true;
 
-        doc.setFontSize(16);
-        doc.text("REPORTE TÉCNICO STS45", 10, y);
+        doc.setFontSize(18);
+        doc.text("INSPECCIÓN TÉCNICA STS45", 10, y);
         y += 15;
         doc.setFontSize(12);
 
         items.forEach((item, i) => {
-            const card = document.getElementById(`card-${i}`);
-            const btnActive = card.querySelector('button.active');
-            const obs = document.getElementById(`obs-${i}`).value;
+            const area = document.getElementById(`obs-${i}`);
+            const card = area.closest('.card');
+            const btnOk = card.querySelector('.active-ok');
+            const btnNo = card.querySelector('.active-nook');
 
-            if (!btnActive) { complete = false; return; }
+            if(!btnOk && !btnNo) { valid = false; return; }
 
-            const status = btnActive.innerText;
-            if (status === 'NO OK' && !obs.trim()) {
-                alert(`Debe ingresar observación en: ${item}`);
-                complete = false;
+            const res = btnOk ? "OK" : "NO OK";
+            if(res === "NO OK" && !area.value.trim()) {
+                alert("Falta comentario en: " + item);
+                valid = false;
                 return;
             }
 
-            doc.text(`${i+1}. ${item}: ${status}`, 10, y);
+            doc.text(`${item}: ${res}`, 10, y);
             y += 7;
-            if (obs) {
+            if(area.value) {
                 doc.setFontSize(10);
-                doc.text(`   Nota: ${obs}`, 15, y);
-                doc.setFontSize(12);
+                doc.text("   Obs: " + area.value, 15, y);
                 y += 8;
+                doc.setFontSize(12);
             }
         });
 
-        if (!complete) {
-            alert("Por favor complete todos los campos antes de generar el PDF.");
-            return;
-        }
-
-        doc.save(`Inspeccion_STS45_${new Date().getTime()}.pdf`);
+        if(!valid) { alert("Complete la inspección correctamente"); return; }
+        doc.save("Reporte_STS45.pdf");
     }
 </script>
-
 </body>
 </html>
